@@ -1,1 +1,1 @@
-# MetaMarket
+MetaMarket is a sleek, modern web application designed to streamline online marketplace functionalities. It's built on Express.js, offering a robust backend structure for handling various marketplace operations with ease. This repository contains the essential JavaScript setup for initializing the Express application, configuring routes for seamless navigation, and running the server, ensuring a smooth, efficient, and scalable marketplace platform.
