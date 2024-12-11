@@ -8,35 +8,32 @@ interface IERC20 {
 }
 
 contract TransactionHandler {
-    address public tokenAddress;
+    IERC20 public token;
 
     // Event declarations
     event TokensDeposited(address indexed depositor, uint256 amount);
     event TokensTransferred(address indexed recipient, uint256 amount);
 
     constructor(address _tokenAddress) {
-        tokenAddress = _tokenAddress;
+        token = IERC20(_tokenAddress);
     }
 
     // Transfer tokens with added logging
     function transferTokens(address recipient, uint256 amount) external {
-        require(IERC20(tokenAddress).balanceOf(address(this)) >= amount, "Insufficient balance in contract");
-        bool success = IERC20(tokenAddress).transfer(recipient, amount);
-        require(success, "Token transfer failed");
+        require(token.balanceOf(address(this)) >= amount, "Insufficient balance in contract");
+        require(token.transfer(recipient, amount), "Token transfer failed");
         
         emit TokensTransferred(recipient, amount); // Log the transfer
     }
 
     // Deposit tokens with added logging
     function depositTokens(uint256 amount) external {
-        bool success = IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
-        require(success, "Token transfer failed");
-
+        require(token.transferFrom(msg.sender, address(this), amount), "Token transfer failed");
         emit TokensDeposited(msg.sender, amount); // Log the deposit
     }
 
     // Check contract's token balance
     function checkContractTokenBalance() external view returns (uint256) {
-        return IERC20(tokenAddress).balanceOf(address(this));
+        return token.balanceOf(address(this));
     }
 }
